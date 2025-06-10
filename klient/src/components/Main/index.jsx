@@ -79,7 +79,7 @@ const Main = () => {
             try {
                 const config = {
                     method: 'delete',
-                    url: 'http://localhost:8080/api/account',
+                    url: 'http://localhost:8080/api/users/delete',
                     headers: {
                         'Content-Type': 'application/json',
                         'x-access-token': token

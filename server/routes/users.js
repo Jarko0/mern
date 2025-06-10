@@ -50,6 +50,19 @@ router.get("/details", tokenVerification, async (req, res) => {
     }
 });
 
+router.delete("/delete", tokenVerification, async (req, res) => {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.user._id);
+        if (!deletedUser) {
+            return res.status(404).send({ message: "Użytkownik nie znaleziony." });
+        }
+
+        res.status(200).send({ message: "Konto zostało usunięte." });
+    } catch (error) {
+        console.error("Błąd podczas usuwania konta:", error);
+        res.status(500).send({ message: "Błąd serwera." });
+    }
+});
 
 
 
