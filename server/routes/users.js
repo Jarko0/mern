@@ -1,6 +1,8 @@
 const router = require("express").Router()
 const { User, validate } = require("../models/user")
 const bcrypt = require("bcrypt")
+const tokenVerification = require("../middleware/tokenVerification")
+
 router.post("/", async (req, res) => {
     try {
         const { error } = validate(req.body)
@@ -19,4 +21,37 @@ router.post("/", async (req, res) => {
         res.status(500).send({ message: "Internal Server Error" })
     }
 })
+
+router.get("/", async (req, res) => {   
+    User.find().exec()
+        .then(async () => {
+            const users = await User.find();
+            res.status(200).send({ data: users, message: "Lista użytkowników" });
+        })
+        .catch(error => {
+            res.status(500).send({ message: error.message });
+        });
+})
+
+router.get("/details", tokenVerification, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select("-password");
+        if (!user) {
+            return res.status(404).send({ message: "Użytkownik nie znaleziony." });
+        }
+
+        res.status(200).send({
+            message: "Szczegóły konta:",
+            data: user
+        });
+    } catch (error) {
+        console.error("Błąd przy pobieraniu szczegółów konta:", error);
+        res.status(500).send({ message: "Błąd serwera." });
+    }
+});
+
+
+
+
+
 module.exports = router

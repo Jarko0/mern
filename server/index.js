@@ -1,9 +1,11 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const tokenVerification = require('./middleware/tokenVerification')
 
 const app = express()
 
+app.get("/api/users/",tokenVerification)
 app.use(express.json())
 app.use(cors())
 
@@ -18,3 +20,5 @@ connection()
 
 const port = process.env.PORT || 8080
 app.listen(port, () => console.log(`Nasłuchiwanie na porcie ${port}`))
+
+
