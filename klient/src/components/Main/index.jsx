@@ -1,17 +1,27 @@
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import styles from "./styles.module.css";
 import Users from "./Users";
 
+
+
+
 const Main = () => {
-    const [dane, setDane] = useState([]); // lista użytkowników
+    const [dane, setDane] = useState([]);
     const [showUsers, setShowUsers] = useState(false);
-    const [accountDetails, setAccountDetails] = useState(null); // dane aktualnego użytkownika
-    const [message, setMessage] = useState(""); // komunikat z serwera
+    const [accountDetails, setAccountDetails] = useState(null);
+    const [message, setMessage] = useState("");
 
     const handleLogout = () => {
         localStorage.removeItem("token");
         window.location.reload();
+    };
+    
+    const navigate = useNavigate();
+    const goToAddBook = () => {
+        navigate("/add-book");
     };
 
     const handleGetUsers = async (e) => {
@@ -28,7 +38,7 @@ const Main = () => {
                     }
                 };
                 const { data: res } = await axios(config);
-                setDane(res.data);           
+                setDane(res.data);
                 setMessage(res.message || "Lista użytkowników:");
                 setShowUsers(true);
                 setAccountDetails(null);
@@ -56,7 +66,7 @@ const Main = () => {
                 };
                 console.log("Token:", token);
                 const { data: res } = await axios(config);
-                setAccountDetails(res.data);    
+                setAccountDetails(res.data);
                 setMessage(res.message || "Szczegóły konta:");
                 setShowUsers(false);
                 setDane([]);
@@ -108,6 +118,7 @@ const Main = () => {
                     <button className={styles.white_btn} onClick={handleGetAccountDetails}>Szczegóły konta</button>
                     <button className={styles.white_btn} onClick={handleDeleteAccount}>Usuń konto</button>
                     <button className={styles.white_btn} onClick={handleLogout}>Wyloguj się</button>
+                    <button className={styles.white_btn} onClick={goToAddBook}>Ksiazki</button>
                 </div>
             </nav>
 
