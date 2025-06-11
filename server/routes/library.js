@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Book, User } = require('../models/user');
+const { Book, User, ReadBook } = require('../models/user');
 const tokenVerification = require('../middleware/tokenVerification');
 
 // Pobierz wszystkie książki
@@ -26,29 +26,44 @@ router.post('/', async (req, res) => {
 });
 
 
-// Pobierz listę przeczytanych książek zalogowanego użytkownika
 router.post('/read/:bookId', tokenVerification, async (req, res) => {
   try {
-    const userId = req.userId; 
+    const userId = req.user._id; // <-- UPEWNIJ SIĘ, że to jest ._id, NIE req.userId
     const bookId = req.params.bookId;
+
+    console.log("📥 userId:", userId);
+    console.log("📘 bookId:", bookId);
 
     const book = await Book.findById(bookId);
     if (!book) return res.status(404).json({ message: 'Książka nie znaleziona' });
 
-    const user = await User.findById(req.user._id);
+    console.log("📗 book znaleziony:", book);
+
+    const readBook = new ReadBook({
+      userId,
+      bookTitle: book.title,
+      author: book.author
+    });
+
+    console.log("📝 Tworzony ReadBook:", readBook);
+
+    await readBook.save();
+
+    const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
 
-    if (!user.readBooks.includes(bookId)) {
-      user.readBooks.push(bookId);
+    if (!user.readBooks.includes(readBook._id)) {
+      user.readBooks.push(readBook._id);
       await user.save();
     }
 
-    res.status(200).json({ message: 'Dodano do przeczytanych książek' });
+    res.status(201).json({ message: 'Dodano do przeczytanych książek', readBook });
   } catch (error) {
-    console.error(error);
+    console.error("❌ Błąd serwera przy dodawaniu książki do przeczytanych:", error);
     res.status(500).json({ message: 'Błąd serwera' });
   }
 });
+
 
 router.get('/read', tokenVerification, async (req, res) => {
   try {

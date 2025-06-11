@@ -75,14 +75,13 @@ router.delete('/:id', tokenVerification, async (req, res) => {
     }
 });
 
-router.post('/read/:bookId/opinion', tokenVerification, async (req, res) => {
+router.post('/:readBookId/opinion', tokenVerification, async (req, res) => {
   try {
-    const { bookId } = req.params;        // teraz w URL jest bookId, nie readBookId
+    const { readBookId } = req.params;
     const { reviewText } = req.body;
     const userId = req.user._id;
 
-    // Szukamy dokumentu ReadBook na podstawie bookId i userId
-    const readBook = await ReadBook.findOne({ bookId, userId });
+    const readBook = await ReadBook.findById(readBookId); // bez userId
 
     if (!readBook) {
       return res.status(404).json({ message: 'Nie znaleziono przeczytanej książki dla tego użytkownika.' });
