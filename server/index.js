@@ -5,7 +5,8 @@ const cors = require('cors')
 const tokenVerification = require('./middleware/tokenVerification')
 const userRoutes = require("./routes/users")
 const authRoutes = require("./routes/auth")
-const booksRoutes = require('./routes/books')
+const readBooksRoutes = require('./routes/readBooks');
+const libraryRoutes = require('./routes/library');
 const connection = require('./db')
 
 const app = express()
@@ -15,7 +16,9 @@ app.use(cors())
 
 app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoutes)
-app.use("/api/books", booksRoutes)
+app.use('/api/readBooks', readBooksRoutes);
+app.use('/api/library', libraryRoutes); // katalog książek
+
 
 connection()
 

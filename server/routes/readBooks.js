@@ -42,7 +42,6 @@ router.post('/add', tokenVerification, async (req, res) => {
     }
 });
 
-// Edytuj książkę według id (tylko właściciel)
 router.put('/:id', tokenVerification, async (req, res) => {
     try {
         const book = await ReadBook.findById(req.params.id);
@@ -63,7 +62,6 @@ router.put('/:id', tokenVerification, async (req, res) => {
     }
 });
 
-// Usuń książkę według id (tylko właściciel)
 router.delete('/:id', tokenVerification, async (req, res) => {
     try {
         const book = await ReadBook.findById(req.params.id);
@@ -76,5 +74,33 @@ router.delete('/:id', tokenVerification, async (req, res) => {
         res.status(500).json({ message: 'Błąd serwera.' });
     }
 });
+
+router.post('/read/:bookId/opinion', tokenVerification, async (req, res) => {
+  try {
+    const { bookId } = req.params;        // teraz w URL jest bookId, nie readBookId
+    const { reviewText } = req.body;
+    const userId = req.user._id;
+
+    // Szukamy dokumentu ReadBook na podstawie bookId i userId
+    const readBook = await ReadBook.findOne({ bookId, userId });
+
+    if (!readBook) {
+      return res.status(404).json({ message: 'Nie znaleziono przeczytanej książki dla tego użytkownika.' });
+    }
+
+    readBook.reviewText = reviewText;
+    await readBook.save();
+
+    res.json({ message: 'Opinia zapisana.' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Błąd serwera.' });
+  }
+});
+
+
+
+
+
 
 module.exports = router;

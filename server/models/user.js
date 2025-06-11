@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
+    readBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
 });
 
 const readBookSchema = new mongoose.Schema({
@@ -19,6 +20,13 @@ const readBookSchema = new mongoose.Schema({
   reviewText: { type: String }
 });
 
+const bookSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  author: { type: String, required: true },
+  rating: { type: Number, min: 1, max: 5 },
+  description: { type: String }
+});
+
 userSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {
         expiresIn: "7d",
@@ -28,6 +36,7 @@ userSchema.methods.generateAuthToken = function () {
 
 const User = mongoose.model("User", userSchema);
 const ReadBook = mongoose.model("ReadBook", readBookSchema);
+const Book = mongoose.model("Book", bookSchema);
 
 const validate = (data) => {
     const schema = Joi.object({
@@ -39,4 +48,4 @@ const validate = (data) => {
     return schema.validate(data);
 };
 
-module.exports = { User, validate, ReadBook };
+module.exports = { User, validate, ReadBook, Book };
