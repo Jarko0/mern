@@ -77,17 +77,17 @@ router.get('/read', tokenVerification, async (req, res) => {
   }
 });
 
-router.delete("/:id", tokenVerification, async (req, res) => {
-  try {
-    const deleted = await Book.findByIdAndDelete(req.params.id);
-    if (!deleted) {
-      return res.status(404).json({ message: "Książka nie została znaleziona." });
-    }
-    res.json({ message: "Książka usunięta." });
-  } catch (err) {
-    res.status(500).json({ message: "Błąd serwera podczas usuwania książki." });
-  }
-});
+// router.delete("/:id", tokenVerification, async (req, res) => {
+//   try {
+//     const deleted = await Book.findByIdAndDelete(req.params.id);
+//     if (!deleted) {
+//       return res.status(404).json({ message: "Książka nie została znaleziona." });
+//     }
+//     res.json({ message: "Książka usunięta." });
+//   } catch (err) {
+//     res.status(500).json({ message: "Błąd serwera podczas usuwania książki." });
+//   }
+// });
 
 
 module.exports = router;

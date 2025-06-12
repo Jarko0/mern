@@ -75,13 +75,14 @@ router.delete('/:id', tokenVerification, async (req, res) => {
     }
 });
 
+
 router.post('/:readBookId/opinion', tokenVerification, async (req, res) => {
   try {
     const { readBookId } = req.params;
     const { reviewText } = req.body;
     const userId = req.user._id;
 
-    const readBook = await ReadBook.findById(readBookId); // bez userId
+    const readBook = await ReadBook.findOne({ _id: readBookId, userId });
 
     if (!readBook) {
       return res.status(404).json({ message: 'Nie znaleziono przeczytanej książki dla tego użytkownika.' });
@@ -96,6 +97,8 @@ router.post('/:readBookId/opinion', tokenVerification, async (req, res) => {
     res.status(500).json({ message: 'Błąd serwera.' });
   }
 });
+
+
 
 
 
