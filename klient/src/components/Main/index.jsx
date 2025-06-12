@@ -1,28 +1,46 @@
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import styles from "./styles.module.css";
 import Users from "./Users";
-
-
-
+import AddBook from "./AddBook";
+import Books from "./Books";
+import ReadBooks from "./ReadBook";
 
 const Main = () => {
     const [dane, setDane] = useState([]);
     const [showUsers, setShowUsers] = useState(false);
     const [accountDetails, setAccountDetails] = useState(null);
     const [message, setMessage] = useState("");
+    const [activeComponent, setActiveComponent] = useState(null);
+    const [reloadBooks, setReloadBooks] = useState(false); // 🔁
 
     const handleLogout = () => {
         localStorage.removeItem("token");
         window.location.reload();
     };
-    
-    const navigate = useNavigate();
-    const goToAddBook = () => {
-        navigate("/add-book");
-    };
+
+    const clearState = () => {
+    setDane([]);
+    setShowUsers(false);
+    setAccountDetails(null);
+    setMessage("");
+};
+
+const goToAddBook = () => {
+    clearState();
+    setActiveComponent("add");
+};
+
+const goToBooks = () => {
+    clearState();
+    setActiveComponent("books");
+};
+
+const goToReadBooks = () => {
+    clearState();
+    setActiveComponent("read");
+};
+
 
     const handleGetUsers = async (e) => {
         e.preventDefault();
@@ -42,6 +60,7 @@ const Main = () => {
                 setMessage(res.message || "Lista użytkowników:");
                 setShowUsers(true);
                 setAccountDetails(null);
+                setActiveComponent(null);
             } catch (error) {
                 if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                     localStorage.removeItem("token");
@@ -50,7 +69,6 @@ const Main = () => {
             }
         }
     };
-
 
     const handleGetAccountDetails = async () => {
         const token = localStorage.getItem("token");
@@ -64,12 +82,12 @@ const Main = () => {
                         'x-access-token': token
                     }
                 };
-                console.log("Token:", token);
                 const { data: res } = await axios(config);
                 setAccountDetails(res.data);
                 setMessage(res.message || "Szczegóły konta:");
                 setShowUsers(false);
                 setDane([]);
+                setActiveComponent(null);
             } catch (error) {
                 console.error("Błąd w handleGetAccountDetails:", error.response || error.message);
                 if (error.response && error.response.status >= 400 && error.response.status <= 500) {
@@ -109,16 +127,23 @@ const Main = () => {
         }
     };
 
+    const handleBookAdded = () => {
+        setActiveComponent("books");
+        setReloadBooks(prev => !prev); // 🔁 przełącza trigger
+    };
+
     return (
         <div className={styles.main_container}>
             <nav className={styles.navbar}>
-                <h1>MySite</h1>
+                <h1>Dziennik lektur</h1>
                 <div>
                     <button className={styles.white_btn} onClick={handleGetUsers}>Użytkownicy</button>
                     <button className={styles.white_btn} onClick={handleGetAccountDetails}>Szczegóły konta</button>
                     <button className={styles.white_btn} onClick={handleDeleteAccount}>Usuń konto</button>
                     <button className={styles.white_btn} onClick={handleLogout}>Wyloguj się</button>
-                    <button className={styles.white_btn} onClick={goToAddBook}>Ksiazki</button>
+                    <button className={styles.white_btn} onClick={goToBooks}>Wyświetl wszystkie książki</button>
+                    <button className={styles.white_btn} onClick={goToAddBook}>Dodaj książkę</button>
+                    <button className={styles.white_btn} onClick={goToReadBooks}>Wyświetl przeczytane książki</button>
                 </div>
             </nav>
 
@@ -130,12 +155,16 @@ const Main = () => {
             {accountDetails && (
                 <div>
                     <ul>
-                        <li><strong>First Name:</strong> {accountDetails.firstName}</li>
-                        <li><strong>Last Name:</strong> {accountDetails.lastName}</li>
+                        <li><strong>Imię:</strong> {accountDetails.firstName}</li>
+                        <li><strong>Nazwisko:</strong> {accountDetails.lastName}</li>
                         <li><strong>Email:</strong> {accountDetails.email}</li>
                     </ul>
                 </div>
             )}
+
+            {activeComponent === "books" && <Books reloadTrigger={reloadBooks} />}
+            {activeComponent === "add" && <AddBook onBookAdded={handleBookAdded} />}
+            {activeComponent === "read" && <ReadBooks />}
         </div>
     );
 };

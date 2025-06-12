@@ -2,7 +2,10 @@ import { Route, Routes, Navigate } from "react-router-dom"
 import Main from "./components/Main"
 import Signup from "./components/Signup"
 import Login from "./components/Login"
-import AddBook from "./components/Main/books.jsx"  // import komponentu dodawania książki
+import AddBook from "./components/Main/AddBook.jsx";
+import Books from "./components/Main/Books.jsx";
+import ReadBooks from "./components/Main/ReadBook.jsx";
+
 
 function App() {
   const user = localStorage.getItem("token")
@@ -10,7 +13,9 @@ function App() {
   return (
     <Routes>
       {user && <Route path="/" exact element={<Main />} />}
-      {user && <Route path="/add-book" exact element={<AddBook />} />}  {/* nowa ścieżka */}
+      {user && <Route path="/books" element={<Books />} />}
+      <Route path="/add-book" element={<AddBook />} /> {/* <- nowa trasa */}
+      <Route path="/read-books" element={<ReadBooks />} /> {/* <- nowa trasa */}
       <Route path="/signup" exact element={<Signup />} />
       <Route path="/login" exact element={<Login />} />
       <Route path="*" element={<Navigate replace to={user ? "/" : "/login"} />} />
