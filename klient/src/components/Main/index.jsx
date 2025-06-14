@@ -12,7 +12,7 @@ const Main = () => {
     const [accountDetails, setAccountDetails] = useState(null);
     const [message, setMessage] = useState("");
     const [activeComponent, setActiveComponent] = useState(null);
-    const [reloadBooks, setReloadBooks] = useState(false); // 🔁
+    const [reloadBooks, setReloadBooks] = useState(false); 
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -129,7 +129,7 @@ const goToReadBooks = () => {
 
     const handleBookAdded = () => {
         setActiveComponent("books");
-        setReloadBooks(prev => !prev); // 🔁 przełącza trigger
+        setReloadBooks(prev => !prev); //przełącza trigger
     };
 
     return (
@@ -162,7 +162,7 @@ const goToReadBooks = () => {
                 </div>
             )}
 
-            {activeComponent === "books" && <Books reloadTrigger={reloadBooks} />}
+            {activeComponent === "books" && <Books reloadTrigger={reloadBooks} />} 
             {activeComponent === "add" && <AddBook onBookAdded={handleBookAdded} />}
             {activeComponent === "read" && <ReadBooks />}
         </div>

@@ -17,7 +17,8 @@ const readBookSchema = new mongoose.Schema({
   author: { type: String },
   dateRead: { type: Date, default: Date.now },
   rating: { type: Number, min: 1, max: 5 },
-  reviewText: { type: String }
+  reviewText: { type: String },
+  description: { type: String }
 });
 
 const bookSchema = new mongoose.Schema({

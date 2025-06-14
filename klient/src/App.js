@@ -14,8 +14,8 @@ function App() {
     <Routes>
       {user && <Route path="/" exact element={<Main />} />}
       {user && <Route path="/books" element={<Books />} />}
-      <Route path="/add-book" element={<AddBook />} /> {/* <- nowa trasa */}
-      <Route path="/read-books" element={<ReadBooks />} /> {/* <- nowa trasa */}
+      <Route path="/add-book" element={<AddBook />} /> 
+      <Route path="/read-books" element={<ReadBooks />} /> 
       <Route path="/signup" exact element={<Signup />} />
       <Route path="/login" exact element={<Login />} />
       <Route path="*" element={<Navigate replace to={user ? "/" : "/login"} />} />

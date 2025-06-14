@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function Books({reloadTrigger}) {
+function Books({ reloadTrigger }) {
   const [books, setBooks] = useState([]);
   const token = localStorage.getItem("token");
 
@@ -30,22 +30,11 @@ function Books({reloadTrigger}) {
     }
   };
 
-  // const deleteBook = async (bookId) => {
-  //   try {
-  //     await axios.delete(`http://localhost:8080/api/library/${bookId}`, {
-  //       headers: { "x-access-token": token },
-  //     });
-  //     alert("Książka została usunięta.");
-  //     fetchBooks();
-  //   } catch (error) {
-  //     console.error("Błąd usuwania książki:", error.response?.data || error.message);
-  //     alert(`Nie udało się usunąć książki: ${error.response?.data?.message || error.message}`);
-  //   }
-  // };
+
 
   useEffect(() => {
-  fetchBooks();
-}, [reloadTrigger]); // <- reaguje na zmianę
+    fetchBooks();
+  }, [reloadTrigger]); // <- reaguje na zmianę
 
 
   return (
