@@ -34,7 +34,7 @@ function Books({ reloadTrigger }) {
 
   useEffect(() => {
     fetchBooks();
-  }, [reloadTrigger]); // <- reaguje na zmianę
+  }, [reloadTrigger]); 
 
 
   return (
@@ -50,9 +50,7 @@ function Books({ reloadTrigger }) {
             <button className="read-button" onClick={() => markAsRead(book._id)}>
               Dodaj do przeczytanych
             </button>
-            {/* <button className="delete-button" onClick={() => deleteBook(book._id)}>
-              Usuń książkę
-            </button> */}
+            {}
           </div>
         ))}
       </div>

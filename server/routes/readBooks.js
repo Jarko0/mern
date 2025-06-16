@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { ReadBook } = require('../models/user');
 const tokenVerification = require('../middleware/tokenVerification');
 
-// GET przeczytane książki użytkownika
+//przeczytane książki użytkownika
 router.get('/', tokenVerification, async (req, res) => {
   try {
     const books = await ReadBook.find({ userId: req.user._id });
@@ -13,7 +13,7 @@ router.get('/', tokenVerification, async (req, res) => {
   }
 });
 
-// PUT - aktualizacja przeczytanej książki
+//aktualizacja przeczytanej książki
 router.put('/:id', tokenVerification, async (req, res) => {
   try {
     const { id } = req.params;
@@ -84,7 +84,7 @@ router.delete('/:id', tokenVerification, async (req, res) => {
   }
 });
 
-// POST opinia do przeczytanej książki
+//opinia do przeczytanej książki
 router.post('/:readBookId/opinion', tokenVerification, async (req, res) => {
   try {
     const { readBookId } = req.params;

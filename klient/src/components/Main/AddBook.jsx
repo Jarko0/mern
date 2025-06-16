@@ -66,46 +66,16 @@ function AddBook({ onBookAdded }) {
     <div className={styles.form_container}>
       <h2 className={styles.form_title}>Dodaj książkę</h2>
 
-      <input
-        className={styles.input}
-        type="text"
-        placeholder="Tytuł"
-        value={newBook.title}
-        onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
-      />
+      <input className={styles.input} type="text" placeholder="Tytuł" value={newBook.title} onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}/>
       {errors.title && <p className={styles.error}>{errors.title}</p>}
-
-      <input
-        className={styles.input}
-        type="text"
-        placeholder="Autor"
-        value={newBook.author}
-        onChange={(e) => setNewBook({ ...newBook, author: e.target.value })}
-      />
+      <input className={styles.input} type="text" placeholder="Autor" value={newBook.author} onChange={(e) => setNewBook({ ...newBook, author: e.target.value })}/>
       {errors.author && <p className={styles.error}>{errors.author}</p>}
-
-      <input
-        className={styles.input}
-        type="number"
-        placeholder="Ocena (1-5)"
-        value={newBook.rating}
-        onChange={(e) => setNewBook({ ...newBook, rating: e.target.value })}
-        min="1"
-        max="5"
-      />
+      <input className={styles.input} type="number" placeholder="Ocena (1-5)" value={newBook.rating} onChange={(e) => setNewBook({ ...newBook, rating: e.target.value })} min="1" max="5"/>
       {errors.rating && <p className={styles.error}>{errors.rating}</p>}
 
-      <textarea
-        className={styles.textarea}
-        placeholder="Opis"
-        value={newBook.description}
-        onChange={(e) => setNewBook({ ...newBook, description: e.target.value })}
-      />
+      <textarea className={styles.textarea} placeholder="Opis" value={newBook.description} onChange={(e) => setNewBook({ ...newBook, description: e.target.value })}/>
       {errors.description && <p className={styles.error}>{errors.description}</p>}
-
-      <button className={styles.submit_btn} onClick={handleAddBook}>
-        Dodaj książkę
-      </button>
+      <button className={styles.submit_btn} onClick={handleAddBook}> Dodaj książkę </button>
     </div>
   );
 }

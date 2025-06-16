@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { Book, User, ReadBook } = require('../models/user');
 const tokenVerification = require('../middleware/tokenVerification');
 
-// GET wszystkie książki
+//wszystkie książki
 router.get('/', async (req, res) => {
   try {
     const books = await Book.find();
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST dodanie nowej książki
+//dodanie nowej książki
 router.post('/', async (req, res) => {
   try {
     const { title, author, description, rating } = req.body;
@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// POST oznaczenie książki jako przeczytanej
+//oznaczenie książki jako przeczytanej
 router.post('/read/:bookId', tokenVerification, async (req, res) => {
   try {
     const userId = req.user._id;

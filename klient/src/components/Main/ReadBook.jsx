@@ -78,85 +78,38 @@ function ReadBooks() {
 
   return (
     <div>
-      <h2>Przeczytane książki</h2>
-      <ul>
-        {readBooks.map((book) => (
-          <li
-            key={book._id}
-            style={{
-              marginBottom: "2rem",
-              borderBottom: "1px solid #ccc",
-              paddingBottom: "1rem",
-            }}
-          >
-            <h3>{book.bookTitle}</h3>
-            <p><strong>Autor:</strong> {book.author}</p>
+  <h2>Przeczytane książki</h2>
+  <ul>
+    {readBooks.map((book) => (
+      <li key={book._id} style={{ marginBottom: "2rem", borderBottom: "1px solid #ccc", paddingBottom: "1rem" }}>
+        <h3>{book.bookTitle}</h3>
+        <p><strong>Autor:</strong> {book.author}</p>
+        {book.dateRead && <p><strong>Data przeczytania:</strong> {new Date(book.dateRead).toLocaleDateString("pl-PL")}</p>}
+        {book.rating && <p><strong>Ocena:</strong> {book.rating}</p>}
+        {book.description && <p><strong>Opis:</strong> {book.description}</p>}
 
-            {book.dateRead && (
-              <p><strong>Data przeczytania:</strong> {new Date(book.dateRead).toLocaleDateString("pl-PL")}</p>
-            )}
-            {book.rating && (
-              <p><strong>Ocena:</strong> {book.rating}</p>
-            )}
-            {book.description && (
-              <p><strong>Opis:</strong> {book.description}</p>
-            )}
+        {editingReview[book._id] ? (
+          <>
+            <textarea value={reviews[book._id] || ""} onChange={(e) => handleReviewChange(book._id, e.target.value)} rows={3} style={{ width: "100%", marginTop: "0.5rem" }}/>
+            <div style={{ marginTop: "0.5rem" }}>
+              <button onClick={() => submitReview(book._id)}>Zapisz opinię</button>
+              <button onClick={() => setEditingReview((prev) => ({ ...prev, [book._id]: false }))} style={{ marginLeft: "0.5rem" }}>Anuluj</button>
+            </div>
+          </>) : (<>
+            {book.reviewText && <p><strong>Opinia:</strong> {book.reviewText}</p>}
+            <div style={{ marginTop: "0.5rem" }}>
+              <button onClick={() => setEditingReview((prev) => ({ ...prev, [book._id]: true }))}>
+                {book.reviewText ? "Edytuj opinię" : "Dodaj opinię"}
+              </button>
+              <button onClick={() => handleDeleteReadBook(book._id)} style={{ marginLeft: "0.5rem", backgroundColor: "#f44336", color: "white", border: "none", padding: "0.3rem 0.6rem", cursor: "pointer" }}> Usuń z przeczytanych </button>
+            </div>
+          </>
+        )}
+      </li>
+    ))}
+  </ul>
+</div>
 
-            {editingReview[book._id] ? (
-              <>
-                <textarea
-                  value={reviews[book._id] || ""}
-                  onChange={(e) => handleReviewChange(book._id, e.target.value)}
-                  rows={3}
-                  style={{ width: "100%", marginTop: "0.5rem" }}
-                />
-                <div style={{ marginTop: "0.5rem" }}>
-                  <button onClick={() => submitReview(book._id)}>
-                    Zapisz opinię
-                  </button>
-                  <button
-                    onClick={() =>
-                      setEditingReview((prev) => ({ ...prev, [book._id]: false }))
-                    }
-                    style={{ marginLeft: "0.5rem" }}
-                  >
-                    Anuluj
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                {book.reviewText && (
-                  <p><strong>Opinia:</strong> {book.reviewText}</p>
-                )}
-                <div style={{ marginTop: "0.5rem" }}>
-                  <button
-                    onClick={() =>
-                      setEditingReview((prev) => ({ ...prev, [book._id]: true }))
-                    }
-                  >
-                    {book.reviewText ? "Edytuj opinię" : "Dodaj opinię"}
-                  </button>
-                  <button
-                    onClick={() => handleDeleteReadBook(book._id)}
-                    style={{
-                      marginLeft: "0.5rem",
-                      backgroundColor: "#f44336",
-                      color: "white",
-                      border: "none",
-                      padding: "0.3rem 0.6rem",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Usuń z przeczytanych
-                  </button>
-                </div>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
 
